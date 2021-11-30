@@ -175,4 +175,3 @@ spec:
             name: qu-svc
             port: 
               number: 82
-
