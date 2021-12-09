@@ -15,7 +15,7 @@ kind: Deployment
 metadata:
   name: redis-host
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: redis-host
@@ -64,6 +64,14 @@ spec:
       containers:
       - name: root-app
         image: 3ido0/pub-images:root-svc
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
         resources:
           limits:
             memory: "128Mi"
@@ -98,8 +106,16 @@ spec:
         app: req-app
     spec:
       containers:
-      - name: root-app
+      - name: req-app
         image: 3ido0/pub-images:req-svc
+        livenessProbe:
+          httpGet:
+            path: /requests
+            port: 81
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
         resources:
           limits:
             memory: "128Mi"
@@ -136,6 +152,14 @@ spec:
       containers:
       - name: qu-app
         image: 3ido0/pub-images:qu-svc
+        livenessProbe:
+          httpGet:
+            path: /queries
+            port: 82
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
         resources:
           limits:
             memory: "128Mi"
